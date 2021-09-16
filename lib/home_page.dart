@@ -9,7 +9,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var url = "https://jsonplaceholder.typicode.com/photos";
-  bool loading = false;
+  bool loading = true;
   var data;
   @override
   void initState() {
@@ -17,7 +17,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   fetchData() async {
-    loading = true;
     setState(() {});
     var res = await http.get(Uri.parse(url));
     data = jsonDecode(res.body);
@@ -50,7 +49,10 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: (data == null)
-            ? Text("Click the floatingActionButton below")
+            ? Text(
+                "Click the floatingActionButton below",
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              )
             : ((loading)
                 ? CircularProgressIndicator()
                 :
