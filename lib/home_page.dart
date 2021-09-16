@@ -58,10 +58,13 @@ class _HomePageState extends State<HomePage> {
                 :
                 //  Icon(Icons.add_business)
                 ListView.builder(itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(data[index]["title"]),
-                      subtitle: Text("ID:  ${data[index]["id"]}"),
-                      leading: Image.network(data[index]["url"]),
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(data[index]["title"]),
+                        subtitle: Text("ID:  ${data[index]["id"]}"),
+                        leading: Image.network(data[index]["url"]),
+                      ),
                     );
                   })),
       ),
