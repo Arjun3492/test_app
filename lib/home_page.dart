@@ -9,18 +9,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var url = "https://jsonplaceholder.typicode.com/photos";
+  bool loading = false;
   var data;
   @override
   void initState() {
     super.initState();
-    fetchData();
-    setState(() {});
   }
 
   fetchData() async {
+    loading = true;
+    setState(() {});
     var res = await http.get(Uri.parse(url));
     data = jsonDecode(res.body);
-    print(data);
+    loading = false;
+    setState(() {});
   }
 
   @override
@@ -30,8 +32,9 @@ class _HomePageState extends State<HomePage> {
         title: const Text("TestApp"),
       ),
       floatingActionButton: FloatingActionButton(
-        // onPressed: fetchData(),
-        onPressed: () {},
+        onPressed: () {
+          fetchData();
+        },
         child: Icon(Icons.refresh),
       ),
       drawer: Drawer(
@@ -46,15 +49,20 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Center(
-          child: (data != null)
-              ? ListView.builder(itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(data[index]["title"]),
-                    subtitle: Text("ID:  ${data[index]["id"]}"),
-                    leading: Image.network(data[index]["url"]),
-                  );
-                })
-              : CircularProgressIndicator()),
+        child: (data == null)
+            ? Text("Click the floatingActionButton below")
+            : ((loading)
+                ? CircularProgressIndicator()
+                :
+                //  Icon(Icons.add_business)
+                ListView.builder(itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(data[index]["title"]),
+                      subtitle: Text("ID:  ${data[index]["id"]}"),
+                      leading: Image.network(data[index]["url"]),
+                    );
+                  })),
+      ),
     );
   }
 }
