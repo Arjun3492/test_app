@@ -1,0 +1,30 @@
+# Build and deploy the flutter apk on github 
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master  
+name: "Build and Deploy"
+jobs:
+  build:
+    name: "Build and Deploy"
+    runs_on: ubuntu-latest
+    steps:
+      -uses:actions/checkout@v2
+      -uses:actions/setup-java@v1
+        with:
+          java-version: "12.x"
+      -uses:subosito/flutter-action@v1
+       with:
+         channel: "stable"
+      -run: flutter clean
+      -run: flutter pub get
+      -run: flutter build apk --split-per-abi
+      -name: Push to Release 
+       uses: svenstaro/upload-release-action@v2
+       with:
+        artifacts :"build/app/outputs/apk/release/*"
+        tags: v1.0.${{ github.run_number }}
+        token: ${{ secrets.TOKEN }}
